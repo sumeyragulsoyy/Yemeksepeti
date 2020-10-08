@@ -12,7 +12,7 @@ namespace Yemeksepeti.Models
         public double MinBasketAmount { get; set; }
         public int ServiceDuration { get; set; }
         public TimeSpan WorkingHours { get; set; }
-        public List<Address> DeliveryDistricts { get; set; }
+        public List<DeliveryDistrict> DeliveryDistricts { get; set; }
         public List<Comment> Comments { get; set; }
         public Menu Menu { get; set; }
         public CommunicationInfo CommunicationInfo { get; set; }

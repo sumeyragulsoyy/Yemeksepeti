@@ -32,7 +32,7 @@ namespace Yemeksepeti.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("District")
@@ -41,24 +41,11 @@ namespace Yemeksepeti.Migrations
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("RestaurantId");
-
                     b.ToTable("Addresses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Country = "Turkey",
-                            CustomerId = 1
-                        });
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Comment", b =>
@@ -130,38 +117,53 @@ namespace Yemeksepeti.Migrations
                     b.Property<int>("Bonus")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Bonus = 0,
-                            Name = "Sumeyra"
-                        });
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.DeliveryDistrict", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Explanation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("DeliveryDistrict");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Menu", b =>
@@ -247,37 +249,52 @@ namespace Yemeksepeti.Migrations
                     b.Property<double>("Taste")
                         .HasColumnType("float");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("WorkingHours")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            MinBasketAmount = 0.0,
-                            Name = "Dominos",
-                            ServiceDuration = 0,
-                            ServiceVelocity = 0.0,
-                            Taste = 0.0,
-                            WorkingHours = new TimeSpan(0, 0, 0, 0, 0)
-                        });
+                    b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Address", b =>
                 {
                     b.HasOne("Yemeksepeti.Models.Customer", "Customer")
                         .WithMany("Addres")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Yemeksepeti.Models.Restaurant", null)
-                        .WithMany("DeliveryDistricts")
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Comment", b =>
@@ -294,6 +311,22 @@ namespace Yemeksepeti.Migrations
                         .HasForeignKey("Yemeksepeti.Models.CommunicationInfo", "RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.Customer", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("Yemeksepeti.Models.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.DeliveryDistrict", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.Restaurant", "Restaurant")
+                        .WithMany("DeliveryDistricts")
+                        .HasForeignKey("RestaurantId");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Menu", b =>
@@ -317,6 +350,15 @@ namespace Yemeksepeti.Migrations
                     b.HasOne("Yemeksepeti.Models.MenuCategory", "MenuCategory")
                         .WithMany("Products")
                         .HasForeignKey("MenuCategoryId");
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.Restaurant", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.User", "User")
+                        .WithOne("Restaurant")
+                        .HasForeignKey("Yemeksepeti.Models.Restaurant", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,8 @@ namespace Yemeksepeti.Models
         public int Bonus { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }
-       
+        
+        
         
 
     }

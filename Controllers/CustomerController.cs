@@ -20,5 +20,12 @@ namespace Yemeksepeti.Controllers
         public async Task<IActionResult> GetCustomerById(int id){
             return Ok(await _customerService.getCustomerById(id));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(){
+            return Ok(await _customerService.getAll());
+        }
+
+        //
     }
 }

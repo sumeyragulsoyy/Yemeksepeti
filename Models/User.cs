@@ -8,6 +8,8 @@ namespace Yemeksepeti.Models
         public byte[] PasswordHash { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public Customer Customer { get; set; }
+        public Restaurant Restaurant { get; set; }
         
     }
 }

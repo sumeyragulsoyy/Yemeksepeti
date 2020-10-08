@@ -10,8 +10,8 @@ using Yemeksepeti.Data;
 namespace Yemeksepeti.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201006184641_InıtialCommit")]
-    partial class InıtialCommit
+    [Migration("20201007160310_InitialCommit")]
+    partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,28 +124,22 @@ namespace Yemeksepeti.Migrations
                     b.Property<int>("Bonus")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -157,7 +151,13 @@ namespace Yemeksepeti.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId")
+                        .IsUnique();
 
                     b.ToTable("Menus");
                 });
@@ -212,9 +212,6 @@ namespace Yemeksepeti.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("MenuId")
-                        .HasColumnType("int");
-
                     b.Property<double>("MinBasketAmount")
                         .HasColumnType("float");
 
@@ -230,14 +227,45 @@ namespace Yemeksepeti.Migrations
                     b.Property<double>("Taste")
                         .HasColumnType("float");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("WorkingHours")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Address", b =>
@@ -267,6 +295,24 @@ namespace Yemeksepeti.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Yemeksepeti.Models.Customer", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("Yemeksepeti.Models.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.Menu", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.Restaurant", "Restaurant")
+                        .WithOne("Menu")
+                        .HasForeignKey("Yemeksepeti.Models.Menu", "RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Yemeksepeti.Models.MenuCategory", b =>
                 {
                     b.HasOne("Yemeksepeti.Models.Menu", "Menu")
@@ -283,9 +329,11 @@ namespace Yemeksepeti.Migrations
 
             modelBuilder.Entity("Yemeksepeti.Models.Restaurant", b =>
                 {
-                    b.HasOne("Yemeksepeti.Models.Menu", "Menu")
-                        .WithMany()
-                        .HasForeignKey("MenuId");
+                    b.HasOne("Yemeksepeti.Models.User", "User")
+                        .WithOne("Restaurant")
+                        .HasForeignKey("Yemeksepeti.Models.Restaurant", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

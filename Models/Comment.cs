@@ -11,6 +11,6 @@ namespace Yemeksepeti.Models
         public int ServiceDuration { get; set; }
         public string Detail { get; set; }
         public Restaurant Restaurant { get; set; }
-        public int RestaurantId { get; set; }
+        
     }
 }

@@ -3,60 +3,48 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Yemeksepeti.Migrations
 {
-    public partial class InıtialCommit : Migration
+    public partial class InitialCommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(nullable: true),
+                    PasswordSalt = table.Column<byte[]>(nullable: true),
+                    PasswordHash = table.Column<byte[]>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PasswordSalt = table.Column<byte[]>(nullable: true),
-                    PasswordHash = table.Column<byte[]>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     Bonus = table.Column<int>(nullable: false),
-                    Role = table.Column<string>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Menus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Menus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MenuCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    MenuId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MenuCategories_Menus_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menus",
+                        name: "FK_Customers_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,38 +59,17 @@ namespace Yemeksepeti.Migrations
                     MinBasketAmount = table.Column<double>(nullable: false),
                     ServiceDuration = table.Column<int>(nullable: false),
                     WorkingHours = table.Column<TimeSpan>(nullable: false),
-                    MenuId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Restaurants_Menus_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menus",
+                        name: "FK_Restaurants_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Price = table.Column<double>(nullable: false),
-                    MenuCategoryId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_MenuCategories_MenuCategoryId",
-                        column: x => x.MenuCategoryId,
-                        principalTable: "MenuCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,6 +148,66 @@ namespace Yemeksepeti.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RestaurantId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Menus_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MenuCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    MenuId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MenuCategories_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Price = table.Column<double>(nullable: false),
+                    MenuCategoryId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_MenuCategories_MenuCategoryId",
+                        column: x => x.MenuCategoryId,
+                        principalTable: "MenuCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CustomerId",
                 table: "Addresses",
@@ -203,9 +230,21 @@ namespace Yemeksepeti.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customers_UserId",
+                table: "Customers",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MenuCategories_MenuId",
                 table: "MenuCategories",
                 column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Menus_RestaurantId",
+                table: "Menus",
+                column: "RestaurantId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_MenuCategoryId",
@@ -213,9 +252,12 @@ namespace Yemeksepeti.Migrations
                 column: "MenuCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Restaurants_MenuId",
+                name: "IX_Restaurants_UserId",
                 table: "Restaurants",
-                column: "MenuId");
+                column: "UserId",
+                unique: true);
+
+           
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -236,13 +278,16 @@ namespace Yemeksepeti.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Restaurants");
-
-            migrationBuilder.DropTable(
                 name: "MenuCategories");
 
             migrationBuilder.DropTable(
                 name: "Menus");
+
+            migrationBuilder.DropTable(
+                name: "Restaurants");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
