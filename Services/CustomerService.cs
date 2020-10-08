@@ -33,7 +33,9 @@ namespace Yemeksepeti.Services
         public async Task<ServiceResponse<GetCustomerDto>> getCustomerById(int id)
         {
             ServiceResponse<GetCustomerDto> serviceResponse = new ServiceResponse<GetCustomerDto>();
-            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+            Customer customer = await _context.Customers
+            .Include(c => c.Addres)
+            .FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null)
             {
                 serviceResponse.Success = false;
@@ -43,5 +45,19 @@ namespace Yemeksepeti.Services
             serviceResponse.Data=_mapper.Map<GetCustomerDto>(customer);
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<GetCustomerDto>> createCustomer(AddCustomerDto customer)
+        {
+            ServiceResponse<GetCustomerDto> response= new ServiceResponse<GetCustomerDto>();
+            Customer Customer = _mapper.Map<Customer>(customer);
+            Customer.User =await _context.Users.FirstOrDefaultAsync(c =>c.Id==6);
+            await _context.AddAsync(Customer);
+            await _context.SaveChangesAsync();
+
+            response.Data= _mapper.Map<GetCustomerDto>(Customer);
+            return response;
+        }
+
+        
     }
 }

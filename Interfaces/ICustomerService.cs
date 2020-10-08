@@ -10,5 +10,7 @@ namespace Yemeksepeti.Interfaces
         Task<ServiceResponse<GetCustomerDto>> getCustomerById(int id);
 
         Task<ServiceResponse<List<GetCustomerDto>>> getAll();
+
+        Task<ServiceResponse<GetCustomerDto>> createCustomer(AddCustomerDto customer);
     }
 }

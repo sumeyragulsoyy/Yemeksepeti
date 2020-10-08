@@ -15,6 +15,7 @@ namespace Yemeksepeti.Data
         public DbSet<MenuCategory> MenuCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
     }

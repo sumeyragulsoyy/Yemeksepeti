@@ -1,15 +1,10 @@
-using System.Collections.Generic;
-using Yemeksepeti.Dtos.Address;
-
 namespace Yemeksepeti.Dtos.Customer
 {
-    public class GetCustomerDto
+    public class AddCustomerDto
     {
         public string Name { get; set; } 
         public string Surname { get; set; }               
         public string PhoneNumber { get; set; }
-        public int Bonus { get; set; }
-        public List<GetAddressDto> Addres { get; set; }
         
 
     }

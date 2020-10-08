@@ -11,10 +11,8 @@ namespace Yemeksepeti.Models
         public List<Address> Addres { get; set; }
         public int Bonus { get; set; }
         public User User { get; set; }
-        public int UserId { get; set; }
-        
-        
-        
+        public int UserId { get; set; } 
+             
 
     }
 }

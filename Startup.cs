@@ -33,6 +33,7 @@ namespace Yemeksepeti
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ICustomerService,CustomerService>();
+            services.AddScoped<IAddressService,AddressService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

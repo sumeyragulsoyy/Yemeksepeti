@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Yemeksepeti.Dtos.Address;
+using Yemeksepeti.Dtos.Customer;
 using Yemeksepeti.Interfaces;
 
 namespace Yemeksepeti.Controllers
@@ -26,6 +28,13 @@ namespace Yemeksepeti.Controllers
             return Ok(await _customerService.getAll());
         }
 
-        //
+        [HttpPost]
+        public async Task<IActionResult> createCustomer(AddCustomerDto newCustomer){
+            return Ok(await _customerService.createCustomer(newCustomer));
+        }
+
+        
+
+
     }
 }
