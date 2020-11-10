@@ -9,8 +9,7 @@ namespace Yemeksepeti{
         {
             CreateMap<Customer,GetCustomerDto>();
             CreateMap<AddCustomerDto,Customer>();
-            CreateMap<AddAddressDto,Address>();
-            CreateMap<Address,GetAddressDto>();
+            
             
         }
     }

@@ -6,8 +6,7 @@ namespace Yemeksepeti.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
-        public DbSet<Address> Addresses { get; set; }
+       
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommunicationInfo> CommunicationInfos { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -16,6 +15,18 @@ namespace Yemeksepeti.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder){
+            modelBuilder.Entity<RestaurantRegion>()
+                .HasKey(cs => new { cs.RestaurantId,cs.RegionId});
+                
+            modelBuilder.Entity<CustomerRegion>()
+                .HasKey(c => new {c.CustomerId,c.RegionId});
+            
+            modelBuilder.Entity<User>()
+                .Property(user => user.Role).HasDefaultValue("Customer");
+
+        }
 
 
     }

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Yemeksepeti.Migrations
 {
-    public partial class InitialCommit : Migration
+    public partial class initial_fix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -21,7 +21,7 @@ namespace Yemeksepeti.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,9 +40,9 @@ namespace Yemeksepeti.Migrations
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_User_UserId",
+                        name: "FK_Customers_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -65,9 +65,9 @@ namespace Yemeksepeti.Migrations
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Restaurants_User_UserId",
+                        name: "FK_Restaurants_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -82,8 +82,7 @@ namespace Yemeksepeti.Migrations
                     City = table.Column<string>(nullable: true),
                     District = table.Column<string>(nullable: true),
                     Explanation = table.Column<string>(nullable: true),
-                    CustomerId = table.Column<int>(nullable: true),
-                    RestaurantId = table.Column<int>(nullable: true)
+                    CustomerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,12 +91,6 @@ namespace Yemeksepeti.Migrations
                         name: "FK_Addresses_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Addresses_Restaurants_RestaurantId",
-                        column: x => x.RestaurantId,
-                        principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -146,6 +139,29 @@ namespace Yemeksepeti.Migrations
                         principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryDistrict",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Country = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    District = table.Column<string>(nullable: true),
+                    Explanation = table.Column<string>(nullable: true),
+                    RestaurantId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryDistrict", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DeliveryDistrict_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,11 +230,6 @@ namespace Yemeksepeti.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_RestaurantId",
-                table: "Addresses",
-                column: "RestaurantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_RestaurantId",
                 table: "Comments",
                 column: "RestaurantId");
@@ -234,6 +245,11 @@ namespace Yemeksepeti.Migrations
                 table: "Customers",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryDistrict_RestaurantId",
+                table: "DeliveryDistrict",
+                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuCategories_MenuId",
@@ -256,8 +272,6 @@ namespace Yemeksepeti.Migrations
                 table: "Restaurants",
                 column: "UserId",
                 unique: true);
-
-           
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -270,6 +284,9 @@ namespace Yemeksepeti.Migrations
 
             migrationBuilder.DropTable(
                 name: "CommunicationInfos");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryDistrict");
 
             migrationBuilder.DropTable(
                 name: "Products");
@@ -287,7 +304,7 @@ namespace Yemeksepeti.Migrations
                 name: "Restaurants");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

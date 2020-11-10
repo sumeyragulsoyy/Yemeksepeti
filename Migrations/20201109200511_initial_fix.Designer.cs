@@ -10,8 +10,8 @@ using Yemeksepeti.Data;
 namespace Yemeksepeti.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201007174421_Deliverydistricts_added")]
-    partial class Deliverydistricts_added
+    [Migration("20201109200511_initial_fix")]
+    partial class initial_fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -289,7 +289,7 @@ namespace Yemeksepeti.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Address", b =>

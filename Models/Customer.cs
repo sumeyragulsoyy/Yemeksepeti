@@ -8,7 +8,7 @@ namespace Yemeksepeti.Models
         public string Name { get; set; } 
         public string Surname { get; set; }               
         public string PhoneNumber { get; set; }
-        public List<Address> Addres { get; set; }
+       
         public int Bonus { get; set; }
         public User User { get; set; }
         public int UserId { get; set; } 

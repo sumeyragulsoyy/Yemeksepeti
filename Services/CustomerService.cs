@@ -34,7 +34,6 @@ namespace Yemeksepeti.Services
         {
             ServiceResponse<GetCustomerDto> serviceResponse = new ServiceResponse<GetCustomerDto>();
             Customer customer = await _context.Customers
-            .Include(c => c.Addres)
             .FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null)
             {

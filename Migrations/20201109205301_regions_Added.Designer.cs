@@ -10,8 +10,8 @@ using Yemeksepeti.Data;
 namespace Yemeksepeti.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201007160310_InitialCommit")]
-    partial class InitialCommit
+    [Migration("20201109205301_regions_Added")]
+    partial class regions_Added
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,40 +20,6 @@ namespace Yemeksepeti.Migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Yemeksepeti.Models.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Explanation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RestaurantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("Addresses");
-                });
 
             modelBuilder.Entity("Yemeksepeti.Models.Comment", b =>
                 {
@@ -144,6 +110,24 @@ namespace Yemeksepeti.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Yemeksepeti.Models.CustomerRegion", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AddressDetail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CustomerId", "RegionId");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("CustomerRegion");
+                });
+
             modelBuilder.Entity("Yemeksepeti.Models.Menu", b =>
                 {
                     b.Property<int>("Id")
@@ -205,6 +189,27 @@ namespace Yemeksepeti.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Yemeksepeti.Models.Region", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("County")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Region");
+                });
+
             modelBuilder.Entity("Yemeksepeti.Models.Restaurant", b =>
                 {
                     b.Property<int>("Id")
@@ -241,6 +246,21 @@ namespace Yemeksepeti.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("Yemeksepeti.Models.RestaurantRegion", b =>
+                {
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RestaurantId", "RegionId");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("RestaurantRegion");
+                });
+
             modelBuilder.Entity("Yemeksepeti.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -265,18 +285,7 @@ namespace Yemeksepeti.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("Yemeksepeti.Models.Address", b =>
-                {
-                    b.HasOne("Yemeksepeti.Models.Customer", "Customer")
-                        .WithMany("Addres")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Yemeksepeti.Models.Restaurant", null)
-                        .WithMany("DeliveryDistricts")
-                        .HasForeignKey("RestaurantId");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Yemeksepeti.Models.Comment", b =>
@@ -300,6 +309,21 @@ namespace Yemeksepeti.Migrations
                     b.HasOne("Yemeksepeti.Models.User", "User")
                         .WithOne("Customer")
                         .HasForeignKey("Yemeksepeti.Models.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.CustomerRegion", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yemeksepeti.Models.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -332,6 +356,21 @@ namespace Yemeksepeti.Migrations
                     b.HasOne("Yemeksepeti.Models.User", "User")
                         .WithOne("Restaurant")
                         .HasForeignKey("Yemeksepeti.Models.Restaurant", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yemeksepeti.Models.RestaurantRegion", b =>
+                {
+                    b.HasOne("Yemeksepeti.Models.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yemeksepeti.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
