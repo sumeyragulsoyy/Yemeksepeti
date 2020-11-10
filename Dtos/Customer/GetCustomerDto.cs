@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Yemeksepeti.Dtos.Address;
+using Yemeksepeti.Dtos.Region;
 
 namespace Yemeksepeti.Dtos.Customer
 {
@@ -9,7 +9,7 @@ namespace Yemeksepeti.Dtos.Customer
         public string Surname { get; set; }               
         public string PhoneNumber { get; set; }
         public int Bonus { get; set; }
-        public List<GetAddressDto> Addres { get; set; }
+        //public List<GetAddressDto> Addres { get; set; }
         
 
     }

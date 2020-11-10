@@ -40,6 +40,7 @@ namespace Yemeksepeti
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IRegionService, RegionService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

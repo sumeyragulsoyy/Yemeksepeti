@@ -7,6 +7,8 @@ using Yemeksepeti.Data;
 using Yemeksepeti.Dtos.Customer;
 using Yemeksepeti.Interfaces;
 using Yemeksepeti.Models;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Yemeksepeti.Services
 {
@@ -14,12 +16,17 @@ namespace Yemeksepeti.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public CustomerService(DataContext context, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CustomerService(DataContext context, IMapper mapper,IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _context = context;
-
+            _httpContextAccessor=httpContextAccessor;
         }
+
+        
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        private string GetUserRole() => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
 
         public async Task<ServiceResponse<List<GetCustomerDto>>> getAll()
         {
@@ -34,7 +41,7 @@ namespace Yemeksepeti.Services
         {
             ServiceResponse<GetCustomerDto> serviceResponse = new ServiceResponse<GetCustomerDto>();
             Customer customer = await _context.Customers
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .FirstOrDefaultAsync(c => c.UserId == GetUserId());
             if (customer == null)
             {
                 serviceResponse.Success = false;
@@ -49,7 +56,7 @@ namespace Yemeksepeti.Services
         {
             ServiceResponse<GetCustomerDto> response= new ServiceResponse<GetCustomerDto>();
             Customer Customer = _mapper.Map<Customer>(customer);
-            Customer.User =await _context.Users.FirstOrDefaultAsync(c =>c.Id==6);
+            Customer.User =await _context.Users.FirstOrDefaultAsync(c =>c.Id==GetUserId());
             await _context.AddAsync(Customer);
             await _context.SaveChangesAsync();
 
@@ -57,6 +64,20 @@ namespace Yemeksepeti.Services
             return response;
         }
 
-        
+        public async Task<ServiceResponse<GetCustomerDto>> updateCustomer(UpdateCustomerDto customer)
+        {
+            ServiceResponse<GetCustomerDto> response=new ServiceResponse<GetCustomerDto>();
+            Customer _customer= await _context.Customers
+            .FirstOrDefaultAsync(c => c.UserId == GetUserId());
+
+            _customer.Bonus=customer.Bonus;
+            _customer.Name=customer.Name;
+            _customer.PhoneNumber=customer.PhoneNumber;
+            _customer.Surname=customer.Surname;
+
+            await _context.SaveChangesAsync();
+            response.Data=_mapper.Map<GetCustomerDto>(_customer);
+            return response;
+        }
     }
 }

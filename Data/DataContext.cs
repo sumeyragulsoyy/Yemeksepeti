@@ -15,6 +15,9 @@ namespace Yemeksepeti.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<CustomerRegion> CustomerRegions { get; set; }
+        public DbSet<RestaurantRegion> RestaurantRegions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             modelBuilder.Entity<RestaurantRegion>()

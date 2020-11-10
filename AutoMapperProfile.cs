@@ -1,5 +1,5 @@
 using AutoMapper;
-using Yemeksepeti.Dtos.Address;
+using Yemeksepeti.Dtos.Region;
 using Yemeksepeti.Dtos.Customer;
 using Yemeksepeti.Models;
 
@@ -9,6 +9,9 @@ namespace Yemeksepeti{
         {
             CreateMap<Customer,GetCustomerDto>();
             CreateMap<AddCustomerDto,Customer>();
+            CreateMap<UpdateCustomerDto,Customer>();
+            CreateMap<Region,GetRegionDto>();
+            CreateMap<AddRegionDto,Region>();
             
             
         }
