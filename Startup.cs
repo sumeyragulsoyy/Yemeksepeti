@@ -41,7 +41,8 @@ namespace Yemeksepeti
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IRegionService, RegionService>();
-            services.AddScoped<IRestaurantService,RestaurantService>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<IRestaurantRegionService,RestaurantRegionService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -60,6 +61,29 @@ namespace Yemeksepeti
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Yemeksepeti API", Version = "1.0" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
             });
         }
 
@@ -70,6 +94,7 @@ namespace Yemeksepeti
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Yemeksepeti API");
+
             });
 
             if (env.IsDevelopment())

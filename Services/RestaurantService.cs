@@ -8,6 +8,7 @@ using Yemeksepeti.Models;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Yemeksepeti.Services
 {
@@ -37,14 +38,27 @@ namespace Yemeksepeti.Services
             return response;
         }
 
-        public Task<ServiceResponse<List<GetRestaurantDto>>> getAllRestaurant()
+        public async Task<ServiceResponse<List<GetRestaurantDto>>> getAllRestaurant()
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<List<GetRestaurantDto>> response= new ServiceResponse<List<GetRestaurantDto>>();
+            List<Restaurant> restaurants= await _context.Restaurants.ToListAsync();
+
+            response.Data=restaurants.Select(x => _mapper.Map<GetRestaurantDto>(x)).ToList();
+            return response;
         }
 
-        public Task<ServiceResponse<GetRestaurantDto>> getRestaurant()
+        public async Task<ServiceResponse<GetRestaurantDto>> getRestaurant()
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetRestaurantDto> response=new ServiceResponse<GetRestaurantDto>();
+            Restaurant restaurant =await _context.Restaurants
+                .FirstOrDefaultAsync(x => x.UserId ==GetUserId());
+            if(restaurant == null){
+                response.Success=false;
+                response.Message="Restaurant is not found.";
+                return response;
+            }
+            response.Data=_mapper.Map<GetRestaurantDto>(restaurant);
+            return response;
         }
     }
 }

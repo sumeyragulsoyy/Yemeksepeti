@@ -23,5 +23,15 @@ namespace Yemeksepeti.Controllers
         {
             return Ok(await _restaurantService.createRestaurant(request));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> getRestaurant(){
+           return Ok(await _restaurantService.getRestaurant());
+        }
+
+        [HttpGet("All")]
+        public async Task<IActionResult> getAll(){
+            return Ok(await _restaurantService.getAllRestaurant());
+        }
     }
 }
