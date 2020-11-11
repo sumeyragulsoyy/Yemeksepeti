@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yemeksepeti.Data;
 
 namespace Yemeksepeti.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201111094756_restaurant_hour_type")]
+    partial class restaurant_hour_type
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,8 +217,8 @@ namespace Yemeksepeti.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<TimeSpan>("ClosingHour")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("ClosingHour")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("MinBasketAmount")
                         .HasColumnType("float");
@@ -230,8 +232,8 @@ namespace Yemeksepeti.Migrations
                     b.Property<double>("ServiceVelocity")
                         .HasColumnType("float");
 
-                    b.Property<TimeSpan>("StartingHour")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartingHour")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("Taste")
                         .HasColumnType("float");

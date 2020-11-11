@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 
-namespace Yemeksepeti.Models
+namespace Yemeksepeti.Dtos.Restaurant
 {
-    public class Restaurant
+    public class GetRestaurantDto
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public double ServiceVelocity { get; set; }
         public double Taste { get; set; }
@@ -13,10 +11,5 @@ namespace Yemeksepeti.Models
         public int ServiceDuration { get; set; }
         public TimeSpan StartingHour { get; set; }
         public TimeSpan ClosingHour {get;set;}
-        public List<Comment> Comments { get; set; }
-        public Menu Menu { get; set; }
-        public CommunicationInfo CommunicationInfo { get; set; }
-        public User User { get; set; }
-        public int UserId { get; set; }
     }
 }

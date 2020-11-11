@@ -41,6 +41,7 @@ namespace Yemeksepeti
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IRegionService, RegionService>();
+            services.AddScoped<IRestaurantService,RestaurantService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
