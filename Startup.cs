@@ -43,6 +43,7 @@ namespace Yemeksepeti
             services.AddScoped<IRegionService, RegionService>();
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantRegionService,RestaurantRegionService>();
+            services.AddScoped<ICustomerRegionService,CustomerRegionService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

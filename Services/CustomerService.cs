@@ -40,6 +40,7 @@ namespace Yemeksepeti.Services
         public async Task<ServiceResponse<GetCustomerDto>> getCustomerById(int id)
         {
             ServiceResponse<GetCustomerDto> serviceResponse = new ServiceResponse<GetCustomerDto>();
+            int user=GetUserId();
             Customer customer = await _context.Customers
             .FirstOrDefaultAsync(c => c.UserId == GetUserId());
             if (customer == null)

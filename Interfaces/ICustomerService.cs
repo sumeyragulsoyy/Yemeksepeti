@@ -7,7 +7,7 @@ namespace Yemeksepeti.Interfaces
 {
     public interface ICustomerService
     {
-        Task<ServiceResponse<GetCustomerDto>> getCustomerById(int id);
+        Task<ServiceResponse<GetCustomerDto>> getCustomerById(int id); 
 
         Task<ServiceResponse<List<GetCustomerDto>>> getAll();
 

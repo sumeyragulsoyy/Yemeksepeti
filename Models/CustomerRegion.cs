@@ -7,6 +7,7 @@ namespace Yemeksepeti.Models
         public Region Region { get; set; }
         public int RegionId { get; set; }
         public string AddressDetail { get; set; }
+        public bool IsSelected { get; set; }
         
     }
 }
